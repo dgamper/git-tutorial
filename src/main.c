@@ -64,6 +64,12 @@ void errno_abort(char *message) {
   exit(EXIT_FAILURE);
 }
 
+int err_abort(int status, char *message) {
+  fprintf(stderr, "%s\n", message);
+  exit(status);
+  return 0;
+}
+
 static error_t parse_opt(int key, char *arg, struct argp_state *state) {
   arguments_t *arguments = state->input;
 
@@ -175,7 +181,7 @@ int main(int argc, char **argv) {
          arguments.verbose ? "yes" : "no", arguments.tick);
 
   /** Initialize state machine */
-  states_add(timer_callback, NULL, state_one_run, NULL, state_first_x,
+  states_add(state_probe, NULL, state_one_run, NULL, state_first_e,
              FIRST_STATE_NAME);
   states_add(state_probe, state_two_enter, state_two_run, state_two_exit,
              state_second_e, SECOND_STATE_NAME);
@@ -211,10 +217,4 @@ int main(int argc, char **argv) {
   printf("Finshed\n");
 
   return -1;
-}
-
-int err_abort(int status, char *message) {
-  fprintf(stderr, "%s\n", message);
-  exit(status);
-  return 0;
 }
