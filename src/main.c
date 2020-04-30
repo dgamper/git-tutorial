@@ -199,7 +199,7 @@ int main(int argc, char **argv) {
 
   error = pthread_mutex_lock(&mutex);
 
-  if (!error)
+  if (error)
     err_abort(error, "Lock mutex");
 
   while (count < count_to) {
